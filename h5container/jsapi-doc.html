@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <meta name="generator" content="nico 0.5.1">
+    <meta name="generator" content="nico 0.5.2">
     <meta name="theme" content="autumn 0.1">
     <meta name="keywords" content="支付宝,无线前端,web解决方案,前端,mobile">
     <title>容器接口文档 | AM - 移动Web开放解决方案</title>
@@ -81,7 +81,11 @@
             </li>
             
             <li>
-                <a href="../antui/nav.html">接口文档</a>
+                <a href="../amui/amui-doc.html">接口文档</a>
+            </li>
+            
+            <li>
+                <a href="https://github.com/am-team/amUI/../">Github</a>
             </li>
             
         </ul>
@@ -250,7 +254,7 @@
 }, <span class="literal">false</span>);</code></pre></div><ul>
 <li>最低支持版本：8.0+</li>
 </ul>
-<h3 id="resume">resume</h3><p>当一个webview界面重新回到栈顶时，会触发此事件. 如果这个界面是通过popWindow/popTo到达，且传递了data参数，此页可以收到
+<h3 id="resume">resume</h3><p>当一个webview界面重新回到栈顶时(从后台被唤起、锁屏界面恢复、从下个页面回退)，会触发此事件. 如果这个界面是通过popWindow/popTo到达，且传递了data参数，此页可以收到
 如果在界面的resume之前先发生了app的resume, 则event还会有一个resumeParams, 包含app resume时接收到的参数</p>
 <ul>
 <li>注：
@@ -297,7 +301,7 @@ document.addEventListener(<span class="string">'resume'</span>, <span class="fun
 </tbody>
 </table>
 <ul>
-<li>最低支持版本：8.0+</li>
+<li>最低支持版本：8.1+</li>
 </ul>
 <h3 id="back-后退">back(后退)</h3><p>用户点击导航栏左上角返回按钮或者Android的物理返回键，页面将会收到此事件
 如果在事件的处理函数中调用了event.preventDefault()，容器将忽略backBehaviour，js需要负责回退或做其他操作</p>
@@ -398,11 +402,13 @@ subtitleClick事件回调会触发titleClick回调，建议titleClick 和 subtit
 <li>示例</li>
 </ul>
 <div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'checkApp'</span>, {
-
-     appId: <span class="string">'20000042'</span>
+  appId: <span class="string">'20000042'</span>,
+  stageCode: <span class="string">'firstScreen'</span>
 }, <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span>
-
-     console.log(result.status);
+  console.log(result.status);
+  <span class="keyword">if</span> (result &amp;&amp; result.status == <span class="string">'installed'</span>) {
+    <span class="comment">// 应用可用</span>
+  }
 });</code></pre></div><ul>
 <li>参数</li>
 </ul>
@@ -422,6 +428,13 @@ subtitleClick事件回调会触发titleClick回调，建议titleClick 和 subtit
 <td>string</td>
 <td>应用ID</td>
 <td>N</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>stageCode</td>
+<td>string</td>
+<td>展台代码，目前只有四个，firstScreen(首页九宫格)、secondScreen(首页更多)、urgentA(首页应急位)、contactA(联系人应用)</td>
+<td>Y</td>
 <td>&nbsp;</td>
 </tr>
 </tbody>
@@ -449,9 +462,19 @@ subtitleClick事件回调会触发titleClick回调，建议titleClick 和 subtit
 <td>应用的状态。由开放平台定义</td>
 </tr>
 <tr>
-<td>result.version</td>
+<td>result.extStatus(8.5以上版本支持，只有H5应用有这个字段)</td>
+<td>string</td>
+<td>online, // 上线；uninstall, // 未安装；installing, // 安装中；offline, // 下线</td>
+</tr>
+<tr>
+<td>result.version(只有H5应用有这个字段)</td>
 <td>string</td>
 <td>目标应用的版本。如果应用不存在，则此值为undefined</td>
+</tr>
+<tr>
+<td>result.type（只有native应用有这个字段）</td>
+<td>string</td>
+<td>只有native应用有这个返回字段，值为microApp</td>
 </tr>
 </tbody>
 </table>
@@ -462,12 +485,10 @@ subtitleClick事件回调会触发titleClick回调，建议titleClick 和 subtit
 <li>示例</li>
 </ul>
 <div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'isInstalledApp'</span>, {
-
-     scheme: <span class="string">'alipays://'</span>,
-     packagename: <span class="string">'com.demo.app'</span>
+  scheme: <span class="string">'alipays://'</span>,
+  packagename: <span class="string">'com.eg.android.AlipayGphone'</span>
 }, <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span>
-
-     console.log(result.installed);
+  console.log(result.installed);
 });</code></pre></div><ul>
 <li>参数</li>
 </ul>
@@ -539,7 +560,16 @@ AlipayJSBridge.call(<span class="string">"setTitle"</span>, {
 
     title: <span class="string">'Hello'</span>,
     subtitle: <span class="string">'杭州'</span>  <span class="comment">//8.2</span>
-});</code></pre></div><ul>
+});
+
+<span class="comment">// 设置下拉菜单，dropdownList是数组类型，与subtitle不能共存。若设置了dropdownList则subtitle会被设置成空</span>
+AlipayJSBridge.call(<span class="string">"setTitle"</span>, {
+    dropdownList: [{icon: <span class="string">"dataURL"</span>, title:<span class="string">"杭州"</span>}, {icon: <span class="string">"dataURL"</span>, title:<span class="string">"深圳"</span>}]
+});
+<span class="comment">// 监听点击子菜单事件</span>
+document.addEventListener(<span class="string">'dropdownListEvent'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(event)</span> {</span>
+    alert(event.data.index + event.data.title); 
+}, <span class="literal">false</span>);</code></pre></div><ul>
 <li>参数</li>
 </ul>
 <table>
@@ -550,6 +580,7 @@ AlipayJSBridge.call(<span class="string">"setTitle"</span>, {
 <th>描述</th>
 <th>可选</th>
 <th>默认值</th>
+<th>版本</th>
 </tr>
 </thead>
 <tbody>
@@ -559,6 +590,7 @@ AlipayJSBridge.call(<span class="string">"setTitle"</span>, {
 <td>主标题文案</td>
 <td>N</td>
 <td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 <tr>
 <td>subtitle</td>
@@ -566,10 +598,75 @@ AlipayJSBridge.call(<span class="string">"setTitle"</span>, {
 <td>副标题文案</td>
 <td>Y</td>
 <td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>dropdownList</td>
+<td>array</td>
+<td>下拉菜单，icon是url或者base64，title是子菜单标题</td>
+<td>Y</td>
+<td>&nbsp;</td>
+<td>9.0</td>
+</tr>
+<tr>
+<td>dropdownInit</td>
+<td>int</td>
+<td>下拉菜单，默认选中哪一项</td>
+<td>Y</td>
+<td>0</td>
+<td>9.0</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><code class="javascript"><span class="comment">// 设置右按钮属性</span>
+<ul>
+<li>结果</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>类型</th>
+<th>描述</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event.data.index</td>
+<td>int</td>
+<td>主返回点击子菜单的index文案</td>
+<td>9.0</td>
+</tr>
+<tr>
+<td>event.data.title</td>
+<td>string</td>
+<td>返回点击子菜单的title</td>
+<td>9.0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>错误</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>error</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>没有权限</td>
+</tr>
+<tr>
+<td>11</td>
+<td>用户取消操作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setoptionmenu-设置右按钮属性">setOptionMenu (设置右按钮属性)</h3><div class="highlight"><pre><code class="javascript"><span class="comment">// 设置右按钮属性</span>
 AlipayJSBridge.call(<span class="string">'setOptionMenu'</span>, {
 
      title : <span class="string">'按钮'</span>,  <span class="comment">// 与icon二选一</span>
@@ -660,7 +757,7 @@ AlipayJSBridge.call(<span class="string">'toast'</span>, {
 <tr>
 <td>duration</td>
 <td>int</td>
-<td>显示时长，单位为毫秒。android实际只支持2000/3000两种，小于2500的相当于2000, 大于2500的相当于3000</td>
+<td>显示时长，单位为毫秒。android实际只支持2000/3500两种，小于或等于2000的相当于2000, 大于2000的相当于3500</td>
 <td>Y</td>
 <td>2000</td>
 <td>8.1</td>
@@ -674,14 +771,13 @@ AlipayJSBridge.call(<span class="string">'toast'</span>, {
 <li>示例</li>
 </ul>
 <div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'setToolbarMenu'</span>,{
-
-       menus:[
-    {name:<span class="string">"字体"</span>,tag:<span class="string">"xx"</span>, action:<span class="string">"H5MenuActionOfFont"</span>},  <span class="comment">//调整字体功能（特殊）</span>
-            {name:<span class="string">"xx"</span>,tag:<span class="string">"xx"</span>},
-            {name:<span class="string">"xx"</span>,tag:<span class="string">"xx"</span>}
-       ]
+    menus:[
+    {name:<span class="string">"字体"</span>,tag:<span class="string">"H5MenuActionOfFont"</span>,icon:<span class="string">"https://os.alipayobjects.com/rmsportal/SuHlTsUNSyJvRzn.png"</span>}, 
+        {name:<span class="string">"菜单项2"</span>,tag:<span class="string">"cm2"</span>},
+        {name:<span class="string">"菜单项3"</span>,tag:<span class="string">"cm3"</span>} 
+    ],
+    override:<span class="literal">false</span>
 }, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-
 
 });</code></pre></div><ul>
 <li>参数</li>
@@ -695,15 +791,33 @@ AlipayJSBridge.call(<span class="string">'toast'</span>, {
 <th>描述</th>
 <th>可选</th>
 <th>默认值</th>
+<th>版本</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>menus</td>
 <td>array</td>
-<td>菜单列表</td>
+<td>菜单列表，默认显示于容器默认菜单项的右上角,icon使用容器默认icon（五角星）。<br />name:表示菜单项显示内容，必须控制在4个字符（含）以内，否则容器会截断4个字显示（必须填写）;<br />tag:表示菜单项的唯一标签（必须填写）；<br />icon:可自定义icon，传入图片url（非必填）；<br />当菜单被点击后，传入的值都会被返回；<br />当override为false时，用户自定义菜单个数必须小于5个。</td>
 <td>N</td>
 <td>&nbsp;</td>
+<td></td>
+</tr>
+<tr>
+<td>override</td>
+<td>bool</td>
+<td>是否覆盖容器自带的菜单列表</td>
+<td>Y</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>reset</td>
+<td>bool</td>
+<td>是否重置菜单到系统默认（ios是重置控制面板第二行），当reset=true时，忽略其他参数</td>
+<td>Y</td>
+<td>false</td>
+<td>8.6</td>
 </tr>
 </tbody>
 </table>
@@ -848,7 +962,9 @@ AlipayJSBridge.call(<span class="string">'toast'</span>, {
 </thead>
 <tbody>
 <tr>
-<td></td>
+<td>result.ok</td>
+<td>bool</td>
+<td>用户点击确定</td>
 </tr>
 </tbody>
 </table>
@@ -1005,7 +1121,7 @@ AlipayJSBridge.call(<span class="string">'popTo'</span>, {
 <tbody>
 <tr>
 <td>10</td>
-<td>未配置参数；</td>
+<td>未配置参数；<br />无效的index;<br />未匹配url;<br />未匹配urlPattern;</td>
 </tr>
 </tbody>
 </table>
@@ -1056,16 +1172,15 @@ AlipayJSBridge.call(<span class="string">'popTo'</span>, {
 <h3 id="窗口控制">窗口控制</h3><ul>
 <li>示例</li>
 </ul>
-<div class="highlight"><pre><code class="javascript"><span class="comment">// 开新窗口</span>
+<div class="highlight"><pre><code class="javascript"><span class="comment">// 开新窗口，ios下，调此接口的同时，不要接着调closeWebview/pop接口，会造成钱包崩溃</span>
 AlipayJSBridge.call(<span class="string">'pushWindow'</span>, {
-
-     url: <span class="string">'http://www.alipay.com/'</span>,
-     param: {
-       readTitle: <span class="literal">true</span>,
-       defaultTitle: <span class="literal">true</span>,
-       showToolBar: <span class="literal">false</span>
-       <span class="comment">// ...</span>
-     }
+  url: <span class="string">'http://www.baidu.com/'</span>,
+  param: {
+    readTitle: <span class="literal">true</span>,
+    defaultTitle: <span class="literal">true</span>,
+    showToolBar: <span class="literal">false</span>
+    <span class="comment">// ...</span>
+  }
 });
 
 <span class="comment">// 关闭窗口，可传递参数</span>
@@ -1107,6 +1222,22 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 <td>Y</td>
 <td>{}</td>
 <td>8.0:</td>
+</tr>
+<tr>
+<td>popToIndex</td>
+<td>int</td>
+<td>表示pop后的目标界面在会话界面栈中的索引），如果小于0，则将与当前界面的index相加。</td>
+<td>Y</td>
+<td></td>
+<td>9.0:</td>
+</tr>
+<tr>
+<td>transparent</td>
+<td>bool</td>
+<td>表示是否背景半透明</td>
+<td>Y</td>
+<td>NO，当为YES时，以下参数默认都为NO：showTitlebar、showToolbar、showProgress、showDomain和canPullDown。注：(Android)不支持魔法参数。</td>
+<td>9.0:</td>
 </tr>
 </tbody>
 </table>
@@ -1363,7 +1494,7 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 </ul>
 <h3 id="share-分享">share (分享)</h3><ul>
 <li>备注</li>
-<li>8.1版本的分享接口重新约定，分享组件存在以下问题，将在8.2解决：</li>
+<li>9.3.1已经不再支持来往好友和来往动态的分享渠道</li>
 <li>ios 新浪微博SDK url255限制</li>
 <li>ios 新浪微博不能分享图片+url</li>
 <li><p>android / ios微信分享不同程度展现不一致</p>
@@ -1372,57 +1503,100 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 </li>
 </ul>
 <div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'share'</span>, {
+  <span class="string">'bizType'</span>:<span class="string">"testShareBizType"</span>,   <span class="comment">// 标示业务类型，埋点时使用，不需要埋业务参数，可以设空</span>
+  <span class="string">'keepOrder'</span>:<span class="literal">false</span>, <span class="comment">// 保持分享渠道的顺序,android 9.1 换新的分享组件以后不支持</span>
+  <span class="string">'channels'</span>: [{
+    name: <span class="string">'Weibo'</span>, <span class="comment">//新浪微博</span>
+    param: {
+      title: <span class="string">'分享的标题'</span>,
+      content: <span class="string">'分享的内容，不能超过140'</span>,
+      imageUrl: <span class="string">'分享的图片地址'</span>,
+      captureScreen: <span class="literal">true</span>, <span class="comment">//分享当前屏幕截图(和imageUrl同时存在时，优先imageUrl)</span>
+      url: <span class="string">'http://baidu.com'</span> <span class="comment">//分享跳转的url，当添加此参数时，分享的图片大小不能超过32K</span>
+    }
+  }, {
+    name: <span class="string">'LaiwangTimeline'</span>, <span class="comment">//来往动态</span>
+    param: {
+      title: <span class="string">'分享的标题'</span>,
+      content: <span class="string">'分享的内容'</span>,
+      imageUrl: <span class="string">'分享的图片地址'</span>,
+      captureScreen: <span class="literal">true</span>, 
+      url: <span class="string">'http://alipay.com'</span> 
+    }
+  },{
+    name: <span class="string">'Weixin'</span>, <span class="comment">//微信</span>
+    param: {
+      title: <span class="string">'分享的标题'</span>,
+      content: <span class="string">'分享的内容'</span>,
+      imageUrl: <span class="string">'分享的图片地址'</span>,
+      captureScreen: <span class="literal">true</span>, 
+      url: <span class="string">'http://baidu.com'</span> 
+    }
+  }, {
+    name: <span class="string">'WeixinTimeLine'</span>, <span class="comment">//微信朋友圈</span>
+    param: {
+      title: <span class="string">'分享的标题'</span>,
+      content: <span class="string">'分享的内容'</span>,
+      imageUrl: <span class="string">'分享的图片地址'</span>,
+      captureScreen: <span class="literal">true</span>, 
+      url: <span class="string">'http://baidu.com'</span> 
+    }
+  },{
+        name: <span class="string">'SMS'</span>, <span class="comment">//短信</span>
+        param: {
+            content: <span class="string">'短信内容'</span>,
+            <span class="comment">// contentType和extData为人传人定制功能专用，无需求请勿设置，campId   活动ID （一定不能为空）</span>
+        contentType: <span class="string">'url'</span>,
+            extData:<span class="string">'targetUrl=http://d.alipay.com/rcr/expect.htm,slTargetUrl=http://m.alipay.com,campId=,bizId=biztest,bizName=bn,validDate=10800,length=8'</span>
+        }
+    }, {
+        name: <span class="string">'CopyLink'</span>, <span class="comment">//复制链接</span>
+        param: {
+            url: <span class="string">'http://m.alipay.com'</span>
+        }
+    },{
+    name: <span class="string">'ALPContact'</span>,   <span class="comment">//支付宝联系人,9.0版本</span>
+    param: {   <span class="comment">//请注意，支付宝联系人仅支持一下参数</span>
+      contentType: <span class="string">'text'</span>,    <span class="comment">//必选参数,目前支持支持"text","image","url"格式</span>
+      content:<span class="string">"xxx"</span>,    <span class="comment">//必选参数,分享描述</span>
+      iconUrl:<span class="string">"xxx"</span>,   <span class="comment">//必选参数,缩略图url，发送前预览使用,</span>
+      imageUrl:<span class="string">"xxx"</span>, <span class="comment">//图片url</span>
+      url:<span class="string">"http://www.163.com"</span>,   <span class="comment">//必选参数，卡片跳转连接</span>
+      title:<span class="string">"share title"</span>,    <span class="comment">//必选参数,分享标题</span>
+      memo:<span class="string">""</span>,   <span class="comment">//透传参数,分享成功后，在联系人界面的通知提示。</span>
+      otherParams:{    <span class="comment">//透传参数，额外的分享入参</span>
+          extendData:<span class="string">"testXY"</span>,    <span class="comment">//可选参数，额外的分享入参。服务器验证签名使用，由服务器@笑六 提前发给业务方</span>
+      alipayUrl:<span class="string">'alipays://xxxx'</span> <span class="comment">// 这种方式的url打开 不会跳转到h5中间页</span>
+        }
+    }}]
+},<span class="function"><span class="keyword">function</span><span class="params">(result)</span>{</span>
+});
 
-     <span class="string">'channels'</span>: [{
-       name: <span class="string">'Weibo'</span>, <span class="comment">//新浪微博</span>
-       param: {
-         title: <span class="string">'分享的标题'</span>,
-         content: <span class="string">'分享的内容，不能超过140'</span>,
-         imageUrl: <span class="string">'分享的图片地址'</span>,
-         captureScreen: <span class="literal">true</span>, <span class="comment">//分享当前屏幕截图(和imageUrl同时存在时，优先imageUrl)</span>
-         url: <span class="string">'http://alipay.com'</span> <span class="comment">//分享跳转的url，当添加此参数时，分享的图片大小不能超过32K</span>
-       }
-     }, {
-       name: <span class="string">'LaiwangContacts'</span>, <span class="comment">//来往好友</span>
-       param: {
-         title: <span class="string">'分享的标题'</span>,
-         content: <span class="string">'分享的内容'</span>,
-         imageUrl: <span class="string">'分享的图片地址'</span>,
-         captureScreen: <span class="literal">true</span>,
-         url: <span class="string">'http://alipay.com'</span>
-       }
-     }, {
-       name: <span class="string">'Weixin'</span>, <span class="comment">//微信</span>
-       param: {
-         title: <span class="string">'分享的标题'</span>,
-         content: <span class="string">'分享的内容'</span>,
-         imageUrl: <span class="string">'分享的图片地址'</span>,
-         captureScreen: <span class="literal">true</span>, 
-         url: <span class="string">'http://baidu.com'</span> 
-       }
-     }, {
-       name: <span class="string">'WeixinTimeLine'</span>, <span class="comment">//微信朋友圈</span>
-       param: {
-         title: <span class="string">'分享的标题'</span>,
-         content: <span class="string">'分享的内容'</span>,
-         imageUrl: <span class="string">'分享的图片地址'</span>,
-         captureScreen: <span class="literal">true</span>, 
-         url: <span class="string">'http://baidu.com'</span> 
-       }
-     },{
-       name: <span class="string">'SMS'</span>, <span class="comment">//短信</span>
-       param: {
-           content: <span class="string">'短信内容'</span>,
-           <span class="comment">//应业务方需求定制功能</span>
-           contentType: <span class="string">'url'</span>,
-           extData:<span class="string">''</span>
-       }
-     }, {
-       name: <span class="string">'CopyLink'</span>, <span class="comment">//复制链接</span>
-       param: {
-           url: <span class="string">'http://m.alipay.com'</span>
-       }
-     }]
+ALPContact：
+text类型必填：content
+image类型必填：imageUrl
+url类型必填：iconUrl、title、content、url
+注：如果传alipays协议url，必须增加透传参数：alipayUrl，否则默认会用容器打开alipays页面，中间多余一个空白（about:blank）页面。</code></pre></div><p>9.0以前版本，仅ALPContact不同</p>
+<div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'share'</span>, {
+  <span class="string">'bizType'</span>:<span class="string">"testShareBizType"</span>,   <span class="comment">// 标示业务类型，埋点时使用，不需要埋业务参数，可以设空</span>
+  <span class="string">'keepOrder'</span>:<span class="literal">false</span>, <span class="comment">// 保持分享渠道的顺序</span>
+  <span class="string">'channels'</span>: [{
+    name: <span class="string">'ALPContact'</span>,   <span class="comment">//支付宝联系人</span>
+    param: {   <span class="comment">//请注意，支付宝联系人仅支持一下参数</span>
+      contentType: <span class="string">'1001'</span>,    <span class="comment">//必选参数,目前支持支持"1001","1002","1003"格式，分别为小图linkCard，大图linkCard，大图无标题linkCard</span>
+      content:<span class="string">"xxx"</span>,    <span class="comment">//必选参数,分享描述</span>
+      iconUrl:<span class="string">"xxx"</span>,   <span class="comment">//必选参数,缩略图url，发送前预览使用</span>
+      url:<span class="string">"http://www.163.com"</span>,   <span class="comment">//必选参数，卡片跳转连接</span>
+      title:<span class="string">"share title"</span>,    <span class="comment">//必选参数,分享标题(contentType为1003时不需要填)</span>
+      imageUrl:<span class="string">""</span>,   <span class="comment">//必选参数，大图url，和iconUrl应该是一张图的大图形式，在会话流里显示使用</span>
+      memo:<span class="string">""</span>,   <span class="comment">//必选参数,分享成功后，在联系人界面的通知提示。</span>
+      bizType:<span class="string">""</span>,   <span class="comment">//必选参数,表示业务类型，不超过16个字符，分享前联系@笑六 确认重复性。</span>
+      sign:<span class="string">""</span>,   <span class="comment">//必选参数,签名字符串。防止分享的数据被更改，由联系人的服务端 @笑六 生成</span>
+      maxSelect:<span class="string">"1"</span>,    <span class="comment">//可选参数，最大分享几个人，设空的话，默认为1</span>
+      egg:<span class="string">""</span>,    <span class="comment">//可选参数，彩蛋ID，由 @松雪 配置</span>
+      otherParams:{    <span class="comment">//可选参数，额外的分享入参</span>
+        }
+    }}]
 },<span class="function"><span class="keyword">function</span><span class="params">(result)</span>{</span>
 });</code></pre></div><ul>
 <li>参数</li>
@@ -1439,21 +1613,28 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 </thead>
 <tbody>
 <tr>
+<td>keepOrder</td>
+<td>bool</td>
+<td>保持分享渠道的顺序</td>
+<td>Y</td>
+<td>false</td>
+</tr>
+<tr>
 <td>channels</td>
 <td>array</td>
-<td>分享渠道列表，至少包含一个channel；如果只channel多于一个，会跳出渠道选择框</td>
+<td>分享渠道列表，至少包含一个channel, 每个channel是一个dictionary；如果channel多于一个，会跳出渠道选择框</td>
 <td>N</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>name</td>
+<td>channels[i].name</td>
 <td>string</td>
-<td>渠道名称。支持以下几种：Weibo/LaiwangContacts/LaiwangTimeline/Weixin/WeixinTimeLine/SMS/CopyLink</td>
+<td>渠道名称。支持以下几种：Weibo/LaiwangContacts(9.3.0及以下)/Weixin/WeixinTimeLine/SMS/CopyLink/ALPContact</td>
 <td>N</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>param</td>
+<td>channel[i].param</td>
 <td>dictionary</td>
 <td>指定渠道的参数，支持以下字段：title: string, 分享标题 content : string, 分享内容 imageUrl : string, 图片url captureScreen : bool, 默认为false, 是否截屏分享 url : string, 分享链接</td>
 <td>N</td>
@@ -1476,7 +1657,7 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 <tr>
 <td>result</td>
 <td>dictionary</td>
-<td>android 无回调</td>
+<td>channelName：选择的渠道名称(8.4版支持)；shareResult：分享的结果(true/false)(8.4版支持)</td>
 </tr>
 </tbody>
 </table>
@@ -1504,15 +1685,80 @@ AlipayJSBridge.call(<span class="string">'closeWebview'</span>);</code></pre></d
 <li>城市选择</li>
 <li>示例</li>
 </ul>
-<div class="highlight"><pre><code class="javascript">AlipayJSBridge.call(<span class="string">'getCities'</span>, {
-
-     currentCity: <span class="string">'杭州市'</span>,
-     adcode:<span class="string">'310100'</span>
-}, <span class="function"><span class="keyword">function</span><span class="params">(result)</span>{</span>
-
-     <span class="comment">// 返回用户选择的城市名</span>
-     <span class="comment">//  {'city': '北京市','adcode':'110100'}</span>
+<div class="highlight"><pre><code class="javascript"><span class="comment">//默认城市选择如下</span>
+AlipayJSBridge.call(<span class="string">'getCities'</span>, {
+  currentCity: <span class="string">'杭州市'</span>,
+  adcode:<span class="string">'310100'</span>
+}, <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span>
+  console.log(result);
+});
+<span class="comment">//自定义城市必须如下格式:[{name:"杭州",adcode:"xxxx",pinyin:"hangzhou"},{name:"杭州",adcode:"xxxx",pinyin:"hangzhou"}]</span>
+AlipayJSBridge.call(<span class="string">'getCities'</span>, {
+  currentCity: <span class="string">'杭州市'</span>,
+  adcode:<span class="string">'310100'</span>,
+  needHotCity:<span class="literal">true</span>,
+  customCities:[{name:<span class="string">"杭州"</span>,adcode:<span class="string">"xxxx"</span>,pinyin:<span class="string">"hangzhou"</span>},{name:<span class="string">"杭州"</span>,adcode:<span class="string">"xxxx"</span>,pinyin:<span class="string">"hangzhou"</span>}]
+}, <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span>
+  console.log(result);
 });</code></pre></div><ul>
+<li>参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+<th>可选</th>
+<th>默认值</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentCity</td>
+<td>string</td>
+<td>传入当前使用中的城市名</td>
+<td>N</td>
+<td>&nbsp;</td>
+<td>8.2</td>
+</tr>
+<tr>
+<td>adcode</td>
+<td>string</td>
+<td>传入当前使用中的城市的adcode（如果没有用到adcode，可以传入空字符串）</td>
+<td>N</td>
+<td>&nbsp;</td>
+<td>8.2</td>
+</tr>
+<tr>
+<td>customCities</td>
+<td>array</td>
+<td>自定义城市列表</td>
+<td>Y</td>
+<td>&nbsp;</td>
+<td>8.4</td>
+</tr>
+<tr>
+<td>customHotCities</td>
+<td>array</td>
+<td>自定义热门城市列表</td>
+<td>Y</td>
+<td>&nbsp;</td>
+<td>8.4</td>
+</tr>
+<tr>
+<td>needHotCity</td>
+<td>bool</td>
+<td>是否需要现实热门城市</td>
+<td>Y</td>
+<td>true</td>
+<td>8.4</td>
+</tr>
+</tbody>
+</table>
+<p>å</p>
+<ul>
 <li>最低支持版本：8.1+</li>
 </ul>
 <h3 id="vibrate-调用震动">vibrate (调用震动)</h3><ul>
