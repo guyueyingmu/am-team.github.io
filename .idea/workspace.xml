@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="deda9012-0a2d-462f-b605-191721844cb8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/about/page/1.html" afterPath="$PROJECT_DIR$/about/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/page/1.html" afterPath="$PROJECT_DIR$/amg/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amteam/page/1.html" afterPath="$PROJECT_DIR$/amteam/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amui/page/1.html" afterPath="$PROJECT_DIR$/amui/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amutil/page/1.html" afterPath="$PROJECT_DIR$/amutil/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amw/page/1.html" afterPath="$PROJECT_DIR$/amw/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/h5container/page/1.html" afterPath="$PROJECT_DIR$/h5container/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/page/1.html" afterPath="$PROJECT_DIR$/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wiki/page/1.html" afterPath="$PROJECT_DIR$/wiki/page/1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/h5container/ab-doc.html" afterPath="$PROJECT_DIR$/h5container/ab-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/about/about.html" afterPath="$PROJECT_DIR$/about/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amui/about.html" afterPath="$PROJECT_DIR$/amui/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amutil/about.html" afterPath="$PROJECT_DIR$/amutil/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amw/about.html" afterPath="$PROJECT_DIR$/amw/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/h5container/about.html" afterPath="$PROJECT_DIR$/h5container/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amui/amui-doc.html" afterPath="$PROJECT_DIR$/amui/amui-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amutil/au-doc.html" afterPath="$PROJECT_DIR$/amutil/au-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amw/aw-doc.html" afterPath="$PROJECT_DIR$/amw/aw-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wiki/bookmark.html" afterPath="$PROJECT_DIR$/wiki/bookmark.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/default.html" afterPath="$PROJECT_DIR$/default.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/dev-exp-doc.html" afterPath="$PROJECT_DIR$/amg/dev-exp-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/dev-guild.html" afterPath="$PROJECT_DIR$/amg/dev-guild.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/about/index.html" afterPath="$PROJECT_DIR$/about/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/index.html" afterPath="$PROJECT_DIR$/amg/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amteam/index.html" afterPath="$PROJECT_DIR$/amteam/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amui/index.html" afterPath="$PROJECT_DIR$/amui/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amutil/index.html" afterPath="$PROJECT_DIR$/amutil/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amw/index.html" afterPath="$PROJECT_DIR$/amw/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/h5container/index.html" afterPath="$PROJECT_DIR$/h5container/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wiki/index.html" afterPath="$PROJECT_DIR$/wiki/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amteam/join.html" afterPath="$PROJECT_DIR$/amteam/join.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/h5container/jsapi-doc.html" afterPath="$PROJECT_DIR$/h5container/jsapi-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/mobile-platform-grade.html" afterPath="$PROJECT_DIR$/amg/mobile-platform-grade.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/amg/website-guild.html" afterPath="$PROJECT_DIR$/amg/website-guild.html" />
-    </list>
+    <list default="true" id="deda9012-0a2d-462f-b605-191721844cb8" name="Default" comment="" />
     <ignored path="am-team.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -240,6 +204,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="deda9012-0a2d-462f-b605-191721844cb8" name="Default" comment="" />
@@ -273,6 +240,14 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
