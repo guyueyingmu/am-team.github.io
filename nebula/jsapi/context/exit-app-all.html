@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>页面跳转</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <h1>请点击下面按钮来进行页面间跳转</h1>
+<h3></h3>
+<a href="javascript:void(0)" class="new">新开当前页面</a>
+<a href="javascript:void(0)" class="back">返回一级</a>
+<a href="javascript:void(0)" class="popTo">通过popTo退2级</a>
+<a href="javascript:void(0)" class="exit">关闭所有页面</a>
+
+<script>
+function getQuery() {
+  let match;
+  const urlParams = {};
+  const pl = /\+/g;  // Regex for replacing addition symbol with a space
+  const search = /([^&=]+)=?([^&]*)/g;
+  const decode = function (s) {
+    return decodeURIComponent(s.replace(pl, ' '));
+  };
+  const query = decodeURI(window.location.search.substring(1));
+
+  while (match = search.exec(query)) {
+    urlParams[decode(match[1])] = decode(match[2]);
+  }
+
+  return urlParams;
+};
+
+var query = getQuery();
+var depth = (+query.depth) || 0;
+
+document.querySelector('h3').innerHTML = '当前页面深度: ' + depth;
+
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function(){
+  document.querySelector('.new').addEventListener('click', function(){
+    AlipayJSBridge.call('pushWindow', {
+      url: location.pathname + '?depth=' + (1+depth),
+    });
+  });
+
+  document.querySelector('.back').addEventListener('click', function(){
+    AlipayJSBridge.call('popWindow', {
+      data: {
+        method: 'popWindow',
+        depth: depth,
+      }
+    });
+  });
+
+  document.querySelector('.popTo').addEventListener('click', function(){
+    AlipayJSBridge.call('popTo', {
+      index: -2,
+      data: {
+        method: 'popTo',
+        depth: depth,
+      }
+    }, function(e){
+      if(e.error) {
+        alert('发生错误: ' + JSON.stringify(e));
+      }
+    });
+  });
+
+  document.querySelector('.exit').addEventListener('click', function(){
+    AlipayJSBridge.call('exitApp');
+  });
+});
+
+document.addEventListener('resume', function (event) {
+  alert('页面回退时带过来的内容： ' + JSON.stringify(event.data));
+});
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

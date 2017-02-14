@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>tabBar</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <h1>tabBar</h1>
+
+<script>
+  var base64 = {
+    activeIcon: 'iVBORw0KGgoAAAANSUhEUgAAADQAAAAvCAQAAAAGYCE4AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfeBAoWAhU5ncjwAAACMElEQVRYw72XT0gUURzHP2/bbDV1q1Na9geC8LJSGkSXhMJrQR28RafOYtBRunct1Dpq0CGyDh7skEVkGRQUgWwhFJGLh421ZbWd3X0dGsd947DNa+c33x8M8x3m9/vMb+bNezNgq3N8QvOT2+y3zrVQmnm0G5Ok5ECnKXigIoPhExOWoON0ePu7OSsHakMZ2ND5tqBWw3WxSwp01HAqfKIdqIUjhs/jyIAO02f4HBUZ0Hl6DP8tfKoNKM2w4SssWV1maF1iw3tZNZoVeiUw+3hhYDSPww9uG41SNTBVrkpgzvDD1897uqLHHOSlD+NwLXpMN098GM0s7VFjDjCzDaOZtgX9a7bq51bgqvOb1zxjiZxxNLGtXoIqq3ym3AiS4grLAd1sRYWSEeuBsco9ehSwkzQ73OLrrLlX0s8oFyN7U6YUp7hOL0n3wBrTjONwghkORQQBKMFb3+34xRAw6Jtumo4EAz52O8cATS3CfqAWNHvrSBF/tWC7lP+fPnIj2XyVhirygafcJysNyjLCIth/BdnqJHfJxAGCDBfiAUF3XKBqPKAa7wCkR12ZBzyUBuW4wxsWKUiD2sgzt2kkn1EnY1vf6rKDoYO98YDqJAv6yvfNXanBUGSF50zyRRr0iJss1y+hUrfuMsPmSi0FamXI/IMPAln8azeQ4+9owXdCgSygmu71FRv1NskIY2S8skXGmQdKZEmh6GQPLb4SFco41ACFcrfKc6DIM8eEmfQH27n1x37W3T4AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTYtMDktMTdUMTU6MTk6NTErMDg6MDA6DCD0AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTA0LTEwVDIyOjAyOjIxKzA4OjAwnWo3LwAAAE10RVh0c29mdHdhcmUASW1hZ2VNYWdpY2sgNy4wLjEtNiBRMTYgeDg2XzY0IDIwMTYtMDktMTcgaHR0cDovL3d3dy5pbWFnZW1hZ2ljay5vcmfd2aVOAAAAGHRFWHRUaHVtYjo6RG9jdW1lbnQ6OlBhZ2VzADGn/7svAAAAGXRFWHRUaHVtYjo6SW1hZ2U6OkhlaWdodAAxMDAyPHMfCgAAABh0RVh0VGh1bWI6OkltYWdlOjpXaWR0aAAxMTAyKPipJAAAABl0RVh0VGh1bWI6Ok1pbWV0eXBlAGltYWdlL3BuZz+yVk4AAAAXdEVYdFRodW1iOjpNVGltZQAxMzk3MTM4NTQxzpipagAAABJ0RVh0VGh1bWI6OlNpemUAMTkuNEtCujeYBQAAAF90RVh0VGh1bWI6OlVSSQBmaWxlOi8vL2hvbWUvd3d3cm9vdC9zaXRlL3d3dy5lYXN5aWNvbi5uZXQvY2RuLWltZy5lYXN5aWNvbi5jbi9zcmMvMTE0MzgvMTE0MzgyMS5wbmf20jDHAAAAAElFTkSuQmCC',
+    icon: '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'
+  };
+
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function(){
+    AlipayJSBridge.call('tabBar', {
+      action: 'create', // 创建 Tab Bar，必选
+      textColor: 16776960,    //ffff00 黄，必选
+      selectedColor:16711680, //ff0000 红，必选
+      selectedIndex:1, // 必选
+      items: [ // 所有 TabItems，必选
+        {
+          name: 'tab1', // 标题，必选
+          tag: 'tab11', // tab项id，必选
+          icon: 'https://zos.alipayobjects.com/rmsportal/IOwBUWsFOQyNYhhAxDgb.png', // 正常状态图片 URL，支持 base64 编码 URL，必选
+          activeIcon: 'https://zos.alipayobjects.com/rmsportal/KdyZNLUKgFfAAHreQzoj.png', //选中状态图片 URL，支持 base64 编码 URL，必选
+          redDot: -1, // 选填, '0' 表示红点，null、'-1' 表示不显示，其他值展示出来
+        },
+        {
+          name: 'tab2',
+          tag: 'tab22',
+          icon: base64.icon, //'https://zos.alipayobjects.com/rmsportal/dMHfRGFxWiRidgHSLLvS.png', // 灰色
+          activeIcon: base64.activeIcon, //https://zos.alipayobjects.com/rmsportal/tNPTHyWzgEQNlZLxHVRL.png', // 选中状态图片 URL，支持 base64 编码 URL，必选
+          redDot: '99+'
+        },
+        {
+          name: 'tab3',
+          tag: 'tab33',
+          icon: 'https://zos.alipayobjects.com/rmsportal/neFZyipaNvaZiMgNZrBf.png',
+          activeIcon: 'https://zos.alipayobjects.com/rmsportal/ZralOspCWaHCcCoWxZZk.png',
+          redDot: '中文'
+        },
+        {
+          name: 'tab4',
+          tag: 'tab44',
+          icon: 'https://zos.alipayobjects.com/rmsportal/xBaOvobgYpocSlwanZVM.png',
+          activeIcon: 'https://zos.alipayobjects.com/rmsportal/MTikkHhrAneFXlrfARGD.png',
+          redDot: '😜'
+        },
+        {
+          name: 'tab5',
+          tag: 'tab55',
+          icon: 'https://zos.alipayobjects.com/rmsportal/AukzoUbVCWPJqSjEbFLu.png',
+          activeIcon: 'https://zos.alipayobjects.com/rmsportal/RcumdvGStyfBEDaCuqCt.png',
+          redDot: '1234567890'
+        }
+      ]
+    });
+
+    // 修改某个下标的badge
+    document.addEventListener('tabClick', function(e){
+      console.log('tab clicked! - ' + e.data.tag); // data就是tag的值，请前端自己处理
+      console.log(e);
+       AlipayJSBridge.call('tabBar', {
+        action: 'redDot',
+        tag: e.data.tag,
+        redDot: '12' // -1、0、或者 null 表示取消
+      });
+    });
+  });
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>自定义键盘</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <style>
+* {
+  padding: 0;
+  margin: 0;
+}
+input {
+  display: block;
+  padding: 8px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin: 10px auto;
+}
+#J_inputLog {
+  line-height: 1.2;
+  font-size: 12px;
+}
+</style>
+
+<br>
+<input
+  type="text"
+  class="h5numInput"
+  data-kb-type="0"
+  kb-type="0"
+  data-paste="false"
+  maxlength="6"
+  data-placeholder="iOS kb-type=0"
+  id="J_input1"
+/>
+
+<br>
+<input
+  type="text"
+  class="h5numInput"
+  data-kb-type="1"
+  kb-type="1"
+  data-paste="false"
+  maxlength="6"
+  data-placeholder="iOS kb-type=1"
+  id="J_input2"
+/>
+
+<br>
+<input
+  type="text"
+  class="h5numInput"
+  data-kb-type="2"
+  kb-type="2"
+  data-paste="false"
+  maxlength="6"
+  data-placeholder="iOS kb-type=2"
+  id="J_input3"
+/>
+
+<br>
+<input
+  type="number"
+  placeholder="system/Android"
+  id="J_input4"
+/>
+
+<h5>键盘事件日志</h5>
+<div id="J_inputLog"></div>
+
+<script>
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function() {
+  function doLog(logStr) {
+    document.getElementById('J_inputLog').innerHTML += logStr + '<br>';
+  }
+
+  document.addEventListener('inputEvent', function(event) {
+    doLog("index:" + event.data.index);
+    doLog("number:" + event.data.value);
+    doLog("eventType:" + event.data.eventType);
+
+    console.log(event);
+
+    if(event.data.eventType == "blur") {
+      // do blur
+    }
+    else if(event.data.eventType == "focus") {
+      // do focus
+    }
+    else if(event.data.eventType == "keyup") {
+      // do keyup
+    }
+    else if(event.data.eventType == "keydown") {
+      // do keydown
+    }
+    else if(event.data.eventType == "change") {
+      // do change
+    }
+  }, false);
+});
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

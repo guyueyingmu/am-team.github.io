@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>设置标题栏颜色</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <div style="padding-top:80px;">
+  <a href="javascript:void(0)" class="title">设置标题颜色</a><br>
+  <a href="javascript:void(0)" class="reset">重置标题颜色</a><br><br>
+
+  <a href="javascript:void(0)" class="pushWindow">新开查看透明标题重置效果</a><br>
+  <a href="javascript:void(0)" class="resetTransparent">重置透明标题颜色</a>
+</div>
+
+<script>
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function(){
+  document.querySelector('.title').addEventListener('click', function(){
+    AlipayJSBridge.call("setTitleColor", {
+      color: 16775138,
+      reset: false //(可选,默认为false)  是否重置title颜色为默认颜色。
+    });
+  });
+
+  document.querySelector('.reset').addEventListener('click', function(){
+    AlipayJSBridge.call("setTitleColor",{
+      color: 16775138,
+      reset: true
+    });
+  });
+
+  document.querySelector('.pushWindow').addEventListener('click', function(){
+    AlipayJSBridge.call("pushWindow", {
+      url: './set-title-color-demo.html?__webview_options__=transparentTitle%3Dalways'
+    });
+  });
+
+  document.querySelector('.resetTransparent').addEventListener('click', function(){
+    AlipayJSBridge.call("setTitleColor",{
+      color: 16775138,
+      resetTransparent: true
+    });
+  });
+});
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>
