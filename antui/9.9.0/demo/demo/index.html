@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AntUI Demo</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/rem/antui-all.css">
+    <script>
+        window.addEventListener('message',function(e){
+            if(e.source!=window.parent) return;
+            document.querySelector("body").innerHTML = e.data;
+        },false);
+    </script>
+</head>
+<body ontouchstart=""></body>
+</html>
