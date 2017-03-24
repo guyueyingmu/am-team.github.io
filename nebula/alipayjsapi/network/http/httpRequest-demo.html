@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>httpRequest</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.4/alipayjsapi.inc.min.js"></script>
+
+<style>
+.output{ display:block; max-width: 100%; overflow: auto}
+.img{ display:block; max-width: 100%; margin: 20px auto;}
+</style>
+<button id="J_btn_post" class="btn btn-default">发送POST请求</button>
+<button id="J_btn_base64" class="btn btn-default">获取base64图片</button>
+<img id="J_img" class="img" />
+<pre id="J_output" class="output"></pre>
+
+<script>
+  var btnPost = document.querySelector('#J_btn_post');
+  var btnBase64 = document.querySelector('#J_btn_base64');
+  var output = document.querySelector('#J_output');
+  var img = document.querySelector('#J_img');
+  btnPost.addEventListener('click', function(){
+    ap.showLoading();
+    ap.httpRequest({
+      url: 'http://httpbin.org/post',
+      method: 'POST',
+      data: {
+        from: '支付宝',
+        production: 'AlipayJSAPI'
+      },
+      dataType: 'json',
+      success: function(res) {
+        ap.alert('success');
+      },
+      fail: function(res) {
+        ap.alert('fail');
+      },
+      complete: function(res) {
+        ap.hideLoading();
+
+        ap.alert('complete');
+        output.innerHTML = JSON.stringify(res, undefined, '  ');
+      }
+    });
+  });
+
+  btnBase64.addEventListener('click', function(){
+    ap.showLoading();
+    ap.httpRequest({
+      url: 'http://httpbin.org/image/png',
+      dataType: 'base64'
+    }, function(response){
+      ap.hideLoading();
+      img.src = response.data;
+    });
+  });
+
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

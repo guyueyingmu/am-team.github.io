@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>offAppResume</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.4/alipayjsapi.inc.min.js"></script>
+
+<h2 class="am-ft-center">点击 Home 键回到手机桌面</h2>
+<script>
+  var output = document.querySelector('#J_output');
+  var appPauseHandler = function(){
+    time = Date.now();
+    ap.offAppPause(appPauseHandler);
+  };
+  var appResumeHandler = function(){
+    time = Date.now() - time;
+    ap.alert('应用在后台运行了' + time/1000 + 's');
+    ap.offAppResume(appResumeHandler);
+  };
+  var time;
+
+  ap.onAppPause(appPauseHandler);
+  ap.onAppResume(appResumeHandler);
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>datePicker</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.4/alipayjsapi.inc.min.js"></script>
+
+<button id="J_btnDate" class="btn btn-default">选择日期</button>
+<button id="J_btnTime" class="btn btn-default">选择时间</button>
+<button id="J_btnDateTime" class="btn btn-default">选择日期时间</button>
+<script>
+  var btnDate = document.querySelector('#J_btnDate');
+  var btnTime = document.querySelector('#J_btnTime');
+  var btnDateTime = document.querySelector('#J_btnDateTime');
+  btnDate.addEventListener('click', function(){
+    ap.datePicker({
+      formate: 'yyyy-MM-dd',
+      currentDate: '2012-12-12',
+      startDate: '2012-12-10',
+      endDate: '2012-12-15'
+    }, function(res) {
+      ap.alert(res.date);
+    });
+  });
+  btnTime.addEventListener('click', function(){
+    ap.datePicker({
+      formate: 'HH:mm:ss',
+      currentDate: '12:12:12',
+      startDate: '11:11:11',
+      endDate: '13:13:13'
+    }, function(res) {
+      ap.alert(res.date);
+    });
+  });
+  btnDateTime.addEventListener('click', function(){
+    ap.datePicker({
+      formate: 'yyyy-MM-dd HH:mm:ss',
+      currentDate: '2012-01-09 11:11:11',
+      startDate: '2012-01-01 11:11:11',
+      endDate: '2012-01-10 11:11:11'
+    }, function(res) {
+      ap.alert(res.date);
+    });
+  });
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>
