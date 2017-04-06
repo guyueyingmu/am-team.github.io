@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>onSocketError</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.5/alipayjsapi.inc.min.js"></script>
+
+<style>
+.output{ display:block; max-width: 100%; overflow: auto}
+.img{ display:block; max-width: 100%; margin: 20px auto;}
+</style>
+<button id="J_btn_connect" class="btn btn-default">建立链接</button>
+<button id="J_btn_send" class="btn btn-default">发送数据</button>
+<button id="J_btn_close" class="btn btn-default">关闭链接</button>
+
+<script>
+  var btnConnect = document.querySelector('#J_btn_connect');
+  var btnSend = document.querySelector('#J_btn_send');
+  var btnClose = document.querySelector('#J_btn_close');
+  var counter = 0;
+  ap.onSocketOpen(function(){
+    ap.showToast('socket 已开启');
+  });
+  ap.onSocketError(function(){
+    ap.showToast('socket 出错');
+  });
+  ap.onSocketClose(function(){
+    ap.showToast('socket 已关闭');
+  });
+  ap.onSocketMessage(function(res) {
+    ap.showToast('收到服务器内容：' + res.data)
+  })
+  btnConnect.addEventListener('click', function(){
+    ap.connectSocket({
+      url: 'ws://127.0.0.1:8088',
+      data: {
+        b: '1234567890',
+        c: 9999
+      },
+      headers: {
+        a: '0987654321'
+      }
+    });
+  });
+  btnSend.addEventListener('click', function(){
+    counter ++;
+    ap.sendSocketMessage({
+      data: counter+''
+    }, function(res){
+      console.warn(res);
+    });
+  });
+  btnClose.addEventListener('click', function(){
+    counter ++;
+    ap.closeSocket();
+  });
+
+
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>

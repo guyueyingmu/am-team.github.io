@@ -38,7 +38,7 @@
   </div>
 
 <div class="demo">
-  <h1>关闭当前页面并返回数据</h1>
+  <h1>第一步： 通过pushWindow打开新页面</h1>
 <a href="#" class="btn btn-default J_demo">执行</a>
 <script>
 function ready(callback) {
@@ -50,21 +50,20 @@ function ready(callback) {
     document.addEventListener('AlipayJSBridgeReady', callback, false);
   }
 }
+
+document.addEventListener('resume', function(e) {
+  alert(JSON.stringify(e.data));
+});
+
 ready(function(){
   document.querySelector('a').addEventListener('click', function(){
-    // 传递的data对象将会被即将露出的页面通过resume事件接收
-    AlipayJSBridge.call('popTo', {
-      index: -1, // 回退到上一个页面，假如这个时候没有上一个页面，就会报错
-      data: { //特别强调：data是字典，不是数组
-        from: location.href,
-        info: 'xxxx'
-      }
-    }, function(e) { // 添加回调，因为popTo不一定会成功（当前页面是唯一打开的页面的时候，会报错）
-      alert(JSON.stringify(e));
+    AlipayJSBridge.call('pushWindow', {
+      url: 'pop-to-data.1.html' // 跳转到下一段产生的页面
     });
   });
 });
 </script>
+
 
 </div>
 <script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>

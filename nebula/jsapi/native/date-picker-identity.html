@@ -55,7 +55,9 @@ function ready(callback) {
 ready(function(){
   document.querySelector('.date').addEventListener('click', function(){
     AlipayJSBridge.call('datePicker',{
-      maxDate: '2016-10-9',
+      beginDate: '2015-10-12',
+      minDate: '2015-10-09',
+      maxDate: '2016-10-09',
       mode:1,
       isIDCard: true,
     }, function(e){
