@@ -38,7 +38,7 @@
   </div>
 
 <div class="demo">
-  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.5/alipayjsapi.inc.min.js"></script>
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/3.0.0/alipayjsapi.inc.min.js"></script>
 
 <button id="J_btn_title" class="btn btn-default">设置文字「完成」</button>
 <button id="J_btn_color" class="btn btn-default">设置文字「颜色」</button>
@@ -53,16 +53,36 @@
   var btnReset = document.querySelector('#J_btn_reset');
 
   btnTitle.addEventListener('click', function(){
-    ap.setOptionButton('完成', function(){
-      ap.showToast('你点击了「完成」');
+    ap.setOptionButton({
+      items: [{
+        title: '完成'
+      }],
+      onClick: function(data){
+        ap.alert('你点击了「完成」，它是第' + data.index + '个 optionButton');
+      },
+      success: function(res) {
+        ap.showToast('设置成功');
+      },
+      fail: function(res) {
+        ap.showToast('设置失败');
+      }
     });
   });
   btnColor.addEventListener('click', function(){
     ap.setOptionButton({
-      title: '颜色',
-      color: '#ED4A4D'
-    }, function(){
-      ap.showToast('你点击了「颜色」');
+      items: [{
+        title: '颜色',
+        color: '#ED4A4D'
+      }],
+      onClick: function(data){
+        ap.alert('你点击了「颜色」，它是第' + data.index + '个 optionButton');
+      },
+      success: function(res) {
+        ap.showToast('设置成功');
+      },
+      fail: function(res) {
+        ap.showToast('设置失败');
+      }
     });
   });
 
@@ -75,8 +95,17 @@
         type: 'settings'  
       }
     ];
-    ap.setOptionButton(items, function(res){
-      ap.showToast('你点击了 ' + items[res.index].type);
+    ap.setOptionButton({
+      items: items,
+      onClick: function(data){
+        ap.alert('你点击了 ' + items[data.index].type);
+      },
+      success: function(res){
+        ap.showToast('设置成功');
+      },
+      fail: function(res){
+        ap.showToast('设置失败');
+      }
     });
   });
 
@@ -94,9 +123,16 @@
         {
           icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAQlBMVEUAAAC/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7++vr6/v78Ycp3SAAAAFXRSTlMAEPAwwCDQYEDgsIBwkJ+gf1CPb09zkeEOAAAFLUlEQVR42rzZ25KrIBAF0M0dFWM02f//qyeTmgpliaj05KzXaGgutjTikIGAg5iaIRAjpOIAgSQPIE0QGAdIDRYCdoSU1RDQFlKkQTNDQiiSAc0CGSGTSMEqnMgEmZ7s0Kwje8iQgkVg+AKRmRSM4sCXGRITXzwaeb5MEFCaPxyaOP7QEAh8G9Fk5FtAO0tJJzTfLJo5/poFw0c6QRL41TUmAeEQRH6klhz6EdFEeX5o1fAAfXRK2j7pDS4x67sbInCeKzrigqi50hlco27c6N3p4Htu3BzOMzfNklvECfHGEn0zOEUFz13dw6HKPTru8kHhgAs9D/iH22/d80AfKj2Ii+cp3fLcdEU9l46n+HssxP5cLC/xSzD4ZcLieYldng7Z3LOJnRWgZssm/QxkJvX62u0p4iOmnlfoPhhsmXR2DYwRG3E8uwaSwS6X/HHru/eb4xh8cjjgUuVfdG59LwZdiT23Xhen+rKp20slU8R5rhDC5GR3S9+GBhcYzRXvBPuB3H5zBL5tR9Kt22+PoFOSquBtaKzLhJWBlXRBafGuGFHUhZA3xc18fU/s4uN+f0RXHwIvrw0nFKiHz3uUYoSTvDZUfDOFX+6azPS9EIKpDJ/sfCBv++uFQ5eHTzQHY+Uhz/Rcrs8DIJ0Dc9i+t8VkZfii/v6UTHmu9ApQI6nVF07JhsIkTlzpP1nLFq4cIBO3pbnjmstZK25L9Pj3Z8U91/KV9IWzYinLcm7I1KexbbDaQ2q05eyYhXwiwvT33wvSVJuBvFdwuvTiG4e//2ZkubE846KLB3pphpQKm2e7ZvvVTCxijVXb74ZyghH4CssKje/rWWHxfYEVCd+nWGEgIZ8Dj//BcVeEkAv/irWzXUlBIACgxV6AoN331v//6nQnMzEGLFAkcx59EOICtZA9EVmduYreeuMTFC5rS0Qy/Cg4g/5YTVNs0liSBurUZol2HvkCb7uyqSTVqO7KazC9N5VFjZmNiksm1+/LBLp8mZvPC8rh6YRU1TyufwoiHjOjKNjhS1IUKcTVKSx2r73Vh2elIoO4PAUwuMS4oGEePsOwi9tYy0Nlals7l3f+r+T/O54oNri27ExzLaVejnkDDPv+RajComfBC2yUxZM6b18/iD/bV9CSrvKNT2C+PQH9T7A2AU9T+fYEAk2UiidQfgPR0SxS6fpCQAfqJWkKrxY6OBREdxqUpAmsEPJ44SzZWUAkepqMAOEshIzlVq0sPUobgBcdxb1zWlsjF0mPka9aLIvnu2EuWk9Dkiiri8cSpq1vVCZJGrRHa4FLo9LZVimipyH+XwyR2ZgMmc16Dy9GGuS5kUZ4Lm42S7g1umNDHl+0uLjIXbhwf/Ry/LIRZ9q5g3Brb38+vUS7pmGK9lTJlSfdY7DE0CF+Bz/KPZm0o5o31Bh8xZj0QYwR6+0zoanG9VXfrIFBKKnG99aepIMhb6pzUPDMNnIXeqrzl8pvm4BbTOBykpJn19PLzHa1moZ0TrJP4XJ2jFCViJN/oZdwmjiJqX5x/FtBh99MPC+YHh2nKPOVcNPUhHAqUQcZNoeidpZAU4/En1vpJfXHe/vIWmtL3bxonH2ZTCpgKZpMQYOjqRw0LTTRAh1WmmaFLokmSQN9qenvf/7fKNXVs3zjRk70iZUetQq4ynl6jHfQxPYkxvPjgaBuWDBwH1oaZBHGODs0vINxapV0i1wVPIQPMvn+yrg75SKZDDxOLZq66KhgFoyrJoZdIwqYTeESo/6gv/RHigsquO4PrWwzz9ROC40AAAAASUVORK5CYII='
         }
-      ]
-    }, function(res){
-      ap.showToast('你点击了第 ' + res.index + ' 个按钮');
+      ],
+      onClick: function(data){
+        ap.showToast('你点击了第 ' + data.index + ' 个 optionButton');
+      },
+      success: function(res){
+        ap.showToast('设置成功');
+      },
+      fail: function(res){
+        ap.showToast('设置失败');
+      }
     });
   });
 </script>

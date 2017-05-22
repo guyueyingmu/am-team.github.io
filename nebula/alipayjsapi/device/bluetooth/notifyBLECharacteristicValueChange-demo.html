@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>notifyBLECharacteristicValueChange</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/3.0.0/alipayjsapi.inc.min.js"></script>
+
+<button id="J_btn" class="btn btn-default">启用 notify 功能</button>
+<script>
+  var btn = document.querySelector('#J_btn');
+  btn.addEventListener('click', function(){
+    ap.notifyBLECharacteristicValueChange({
+      // 这里的 deviceId 需要在 getBluetoothDevices 或 onBluetoothDeviceFound 接口中获取
+      deviceId: deviceId,
+      // 这里的 serviceId 需要在 getBLEDeviceServices 接口中获取
+      serviceId: serviceId,
+      // 这里的 characteristicId 需要在 getBLEDeviceCharacteristics 接口中获取
+      characteristicId: characteristicId,
+      success: function(res){
+        ap.alert('启动通知成功');
+      },
+      fail: function(res) {
+        ap.toast('启动通知失败');
+      }
+    });
+  });
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>
