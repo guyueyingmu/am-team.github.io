@@ -2,7 +2,7 @@
 <html>
 <head lang="zh">
   <meta charset="UTF-8" />
-  <title>offAppPause</title>
+  <title>alert和confirm</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="format-detection" content="telephone=no, email=no" />
@@ -38,24 +38,29 @@
   </div>
 
 <div class="demo">
-  <script src="https://a.alipayobjects.com/g/h5-lib/alipayjsapi/0.2.5/alipayjsapi.inc.min.js"></script>
+  <h1>点击以下按钮看不同效果</h1>
+<a href="javascript:void(0)" class="showUCFailDialog">点击showUCFailDialog</a>
 
-<h2 class="am-ft-center">点击 Home 键回到手机桌面</h2>
 <script>
-  var output = document.querySelector('#J_output');
-  var appPauseHandler = function(){
-    time = Date.now();
-    ap.offAppPause(appPauseHandler);
-  };
-  var appResumeHandler = function(){
-    time = Date.now() - time;
-    ap.alert('应用在后台运行了' + time/1000 + 's');
-    ap.offAppPause(appResumeHandler);
-  };
-  var time;
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function(){
+  document.querySelector('.showUCFailDialog').addEventListener('click', function(){
+    AlipayJSBridge.call('showUCFailDialog', {
 
-  ap.onAppPause(appPauseHandler);
-  ap.onAppResume(appResumeHandler);
+    }, function(e){
+      alert('回调结果：' + JSON.stringify(e))
+    });
+  });
+
+});
 </script>
 
 </div>
