@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+  <meta charset="UTF-8" />
+  <title>录制语音</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://as.alipayobjects.com/g/h5-lib/antui/9.9.0-2/??antui.css,widget/notice.css">
+  <style>
+    .demo {
+      margin: 1em 0;
+      padding: 1em 1em 2em;
+      background: #fff;
+    }
+
+    .demo h1 {
+      padding-left: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      border-left: 3px solid #108EE9;
+    }
+
+    .demo h1,
+    .demo p {
+      margin: 1em 0;
+    }
+
+    .demo .am-button + .am-button {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="am-notice fn-hide" id="J_envTip20161108">
+    <div class="am-notice-content">请在支付宝 App 内查看演示 :(</div>
+  </div>
+
+<div class="demo">
+  <h1>点击按钮开始录音</h1>
+
+<button id="J_recordStart" class="btn btn-default read">开始录音</button>
+<button id="J_recordStop" class="btn btn-default read">停止录音</button>
+<button id="J_recordPlay" class="btn btn-default read">播放录音</button>
+<script type="text/javascript">
+function ready(callback) {
+  // 如果jsbridge已经注入则直接调用
+  if (window.AlipayJSBridge) {
+    callback && callback();
+  } else {
+    // 如果没有注入则监听注入的事件
+    document.addEventListener('AlipayJSBridgeReady', callback, false);
+  }
+}
+ready(function(){
+
+      var btnStart = document.getElementById('J_recordStart');
+      var btnStop = document.getElementById('J_recordStop');
+      var btnPlay = document.getElementById('J_recordPlay');
+      var localId;
+
+      btnStart.addEventListener('click',function(e){
+        alert('开始录音');
+        AlipayJSBridge.call('setTitle', {
+          subtitle: '正在录音...'
+        });
+        AlipayJSBridge.call('startAudioRecord', {
+          maxRecordTime: 60, //  最大录音时长，默认60s
+          minRecordTime: 1, // 最小录音时长，默认1s
+          business: 'apm-h5', // 业务标识
+        }, function (result) {
+            alert('startAudioRecord: '+JSON.stringify(result));
+            localId = result.identifier;
+        });
+      });
+
+      btnStop.addEventListener('click',function(e){
+        alert('停止录音');
+        AlipayJSBridge.call('stopAudioRecord', {
+        }, function (result) {
+          alert('stopAudioRecord: '+JSON.stringify(result));
+          AlipayJSBridge.call('setTitle', {
+            subtitle: ''
+          });
+        });
+      });
+
+      btnPlay.addEventListener('click',function(e){
+        if(!localId){
+          alert('先录一段吧');
+          return;
+        }
+        alert('播放录音');
+        AlipayJSBridge.call('startPlayAudio', {
+          identifier: localId, //  音频文件id，可以是cloudid 或者 本地id
+          business: 'apm-h5', // 业务标识
+        }, function (result) {
+          alert('startPlayAudio: '+JSON.stringify(result));
+        });
+      });
+
+
+    });
+</script>
+
+</div>
+<script src="https://a.alipayobjects.com/static/fastclick/1.0.6/fastclick.min.js"></script>
+<script>
+(function() {
+  if (/AlipayClient/i.test(navigator.userAgent)) {
+    document.getElementById('J_envTip20161108').style.display = 'none';
+  }
+
+  var buttons = document.querySelectorAll('.btn');
+
+  if (buttons.length > 0) {
+    var length = buttons.length;
+    var i = 0;
+    FastClick && FastClick.attach(document.body);
+    for (; i < length; i++) {
+      buttons[i].className += ' am-button';
+    }
+  }
+})();
+</script>
+</body>
+</html>
